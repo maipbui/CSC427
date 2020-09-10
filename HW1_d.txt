@@ -1,0 +1,6 @@
+Part d:
+Suppose there are n inputs: x1, x2, ..., xn
+1/ If bk = -1, then the MP neuron produces OR logic.
+2/ If bk = -n, then the MP neuron produces AND logic.
+3/ If bk > -1, then the MP neuron will always be in the firing state.
+4/ If bk < -n, then the MP neuron will always be in the quiescent state.
