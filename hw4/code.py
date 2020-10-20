@@ -39,29 +39,30 @@ def moon(num_points, distance, radius, width):
 
 if __name__ == "__main__":
     # Initialize variable
-    total_points = int(input("enter number of points in each moon: "))
     dist = float(input("enter the distance between 2 moons: "))
     I = np.identity(3)
-    lamda = 0
+    lamda = 0.01
 
     # Create dataset
-    x1, x2, y1, y2 = moon(total_points, dist, 10, 6)
+    x1, x2, y1, y2 = moon(1000, dist, 10, 6)
     dataset = []
-    dataset.extend([1, x1[i], y1[i]] for i in range(total_points))
-    dataset.extend([1, x2[i], y2[i]] for i in range(total_points))
+    dataset.extend([1, x1[i], y1[i]] for i in range(1000))
+    dataset.extend([1, x2[i], y2[i]] for i in range(1000))
     dataset = np.asarray(dataset)
-    np.random.shuffle(dataset)
 
     # Processing for correlation matrix and weight vector
     vect = dataset
     vect_transpose = vect.T
+    ones = np.ones(1000)
+    minus_ones = np.ones(1000) * -1
+    label_set = np.concatenate((ones, minus_ones)).reshape((1000 * 2, 1))
 
     # Compute correlation matrix
     correlation_mat = vect_transpose.dot(vect)
     correlation_mat = np.reshape(correlation_mat, (3, 3))
 
     # Compute weight vector
-    weight = (np.linalg.inv(correlation_mat + lamda * I)).dot(vect_transpose.dot(dataset[:, 2]))
+    weight = (np.linalg.inv(correlation_mat + lamda * I)).dot(vect_transpose.dot(label_set))
 
     # Classify 2 moons separately
     class_1 = dataset[:, 1] * weight[1] + dataset[:, 2] * weight[2] >= -weight[0]
